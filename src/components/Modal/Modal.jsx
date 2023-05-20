@@ -1,40 +1,40 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { createPortal } from 'react-dom';
+import { Component } from 'react';
 import styles from './Modal.module.css';
 
-const modalRoot = document.querySelector('#modal-root');
-
-function Modal({ onClose, children }) {
-  const handleKeyDown = event => {
-    if (event.code === 'Escape') {
-      onClose();
+export class Modal extends Component {
+  handleCloseClick = event => {
+    if (event.target.tagName !== 'IMG') {
+      this.props.onClose();
     }
   };
 
-  const handleBackdropClick = event => {
-    if (event.currentTarget === event.target) {
-      onClose();
+  handleKeyDown = event => {
+    if (event.key === 'Escape') {
+      this.props.onClose();
     }
   };
 
-  const componentDidMount = () => {
-    window.addEventListener('keydown', handleKeyDown);
-  };
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
 
-  componentDidMount();
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
 
-  return createPortal(
-    <div className={styles.Overlay} onClick={handleBackdropClick}>
-      <div className={styles.Modal}>{children}</div>
-    </div>,
-    modalRoot
-  );
+  render() {
+    return (
+      <div className={styles.Overlay} onClick={this.handleCloseClick}>
+        <div className={styles.Modal}>
+          <img src={this.props.image} alt="" />
+        </div>
+      </div>
+    );
+  }
 }
 
 Modal.propTypes = {
+  image: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
 };
-
-export default Modal;

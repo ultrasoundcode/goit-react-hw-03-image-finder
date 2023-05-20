@@ -1,6 +1,8 @@
 .Searchbar {
   top: 0;
   left: 0;
+  right: 0;
+  width: 100%;
   position: sticky;
   z-index: 1100;
   display: flex;
@@ -16,7 +18,6 @@
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
-
 /*
  * РЎС‚РёР»Рё РєРѕРјРїРѕРЅРµРЅС‚Р° SearchForm
  */
@@ -35,7 +36,7 @@
   width: 48px;
   height: 48px;
   border: 0;
-  background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg');
+  background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciICB2aWV3Qm94PSIwIDAgNTAgNTAiIHdpZHRoPSI1MHB4IiBoZWlnaHQ9IjUwcHgiPjxwYXRoIGQ9Ik0gMjEgMyBDIDExLjYwMTU2MyAzIDQgMTAuNjAxNTYzIDQgMjAgQyA0IDI5LjM5ODQzOCAxMS42MDE1NjMgMzcgMjEgMzcgQyAyNC4zNTU0NjkgMzcgMjcuNDYwOTM4IDM2LjAxNTYyNSAzMC4wOTM3NSAzNC4zNDM3NSBMIDQyLjM3NSA0Ni42MjUgTCA0Ni42MjUgNDIuMzc1IEwgMzQuNSAzMC4yODEyNSBDIDM2LjY3OTY4OCAyNy40MjE4NzUgMzggMjMuODc4OTA2IDM4IDIwIEMgMzggMTAuNjAxNTYzIDMwLjM5ODQzOCAzIDIxIDMgWiBNIDIxIDcgQyAyOC4xOTkyMTkgNyAzNCAxMi44MDA3ODEgMzQgMjAgQyAzNCAyNy4xOTkyMTkgMjguMTk5MjE5IDMzIDIxIDMzIEMgMTMuODAwNzgxIDMzIDggMjcuMTk5MjE5IDggMjAgQyA4IDEyLjgwMDc4MSAxMy44MDA3ODEgNyAyMSA3IFoiLz48L3N2Zz4=);
   background-size: 40%;
   background-repeat: no-repeat;
   background-position: center;

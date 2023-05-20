@@ -26,3 +26,7 @@
 .Button:focus {
   background-color: #303f9f;
 }
+
+.Button:disabled {
+  display: none;
+}

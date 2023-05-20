@@ -1,7 +1,6 @@
 /*
  * РЎС‚РёР»Рё РєРѕРјРїРѕРЅРµРЅС‚Р° Modal
  */
-
 .Overlay {
   position: fixed;
   top: 0;
@@ -16,11 +15,6 @@
 }
 
 .Modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.Modal img {
-  max-width: 80%;
-  max-height: 80vh;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 24px);
 }

@@ -1,85 +1,87 @@
-import React, { Component } from 'react';
-import Searchbar from './components/Searchbar/Searchbar';
-import ImageGallery from './components/ImageGallery/ImageGallery';
-import Button from './components/Button/Button';
-import Loader from './components/Loader/Loader';
-import Modal from './components/Modal/Modal';
-import { fetchImages } from './components/API';
-import '../src/index.css';
+import { Component } from 'react';
+import { Searchbar } from './components/Searchbar/Searchbar';
+import { ImageGallery } from './components/ImageGallery/ImageGallery';
+import { Button } from './components/Button/Button';
+import { Loader } from './components/Loader/Loader';
+import { Modal } from './components/Modal/Modal';
+import { Api } from 'API/Api';
+import { Empty } from './components/Empty/Empty';
 
-class App extends Component {
+export class App extends Component {
   state = {
-    query: '',
     images: [],
     page: 1,
     isLoading: false,
-    showModal: false,
-    selectedImage: '',
+    query: '',
+    total: 13,
+    current: null,
   };
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { query, page } = this.state;
-    if (prevState.query !== query) {
-      await this.setState({ page: 1, images: [] }, await this.fetchImages);
-    }
-
-    if (prevState.page !== page && page !== 1) {
-      await this.fetchImages();
+  componentDidUpdate(_, prevState) {
+    if (
+      prevState.page !== this.state.page ||
+      prevState.query !== this.state.query
+    ) {
+      this.fetchImages();
     }
   }
 
-  handleFormSubmit = query => {
-    this.setState({ query });
+  fetchImages = () => {
+    this.setState({
+      isLoading: true,
+    });
+    Api.fetchImages(this.state.query, this.state.page)
+      .then(res => {
+        this.setState({
+          images: [...this.state.images, ...res.data.hits],
+          total: res.data.total,
+        });
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false,
+        });
+      });
   };
 
-  handleLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
-  };
+  isDisabled() {
+    return this.state.page >= Math.ceil(this.state.total / 12);
+  }
 
-  handleImageClick = largeImageURL => {
-    this.setState({ selectedImage: largeImageURL, showModal: true });
-  };
-
-  handleModalClose = () => {
-    this.setState({ showModal: false, selectedImage: '' });
-  };
-
-  fetchImages = async () => {
-    const { query, page } = this.state;
-
-    this.setState({ isLoading: true });
-
-    try {
-      const images = await fetchImages(query, page);
-      this.setState(prevState => ({
-        images: [...prevState.images, ...images],
-        isLoading: false,
-      }));
-    } catch (error) {
-      console.log(error);
-    }
+  onSubmit = query => {
+    this.setState({ query, page: 1, images: [] });
   };
 
   render() {
-    const { images, isLoading, showModal, selectedImage } = this.state;
+    const hasImages = this.state.images.length > 0;
+    const hasLoading = this.state.isLoading && !hasImages;
 
     return (
       <div className="App">
-        <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery images={images} onImageClick={this.handleImageClick} />
-        {isLoading && <Loader />}
-
-        {images.length > 0 && !isLoading && (
-          <Button onClick={this.handleLoadMore} />
+        <Searchbar onSubmit={this.onSubmit} />
+        {hasImages ? (
+          <ImageGallery
+            onClickImage={image => this.setState({ current: image })}
+            images={this.state.images}
+          />
+        ) : (
+          <Empty />
         )}
-        {showModal && (
-          <Modal onClose={this.handleModalClose}>
-            <img src={selectedImage} alt="" />
-          </Modal>
+        {hasLoading && <Loader />}
+        {hasImages && (
+          <Button
+            disabled={this.isDisabled()}
+            onClick={() => this.setState({ page: this.state.page + 1 })}
+          />
+        )}
+
+        {this.state.current && (
+          <Modal
+            onClose={() => this.setState({ current: null })}
+            image={this.state.current}
+          />
         )}
       </div>
     );
   }
 }
-
-export default App;
