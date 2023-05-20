@@ -45,7 +45,7 @@ export class App extends Component {
   };
 
   isDisabled() {
-    return this.state.page >= Math.ceil(this.state.total / 12);
+    return this.state.page >= Math.ceil(this.state.totalHits / 12);
   }
 
   onSubmit = query => {
